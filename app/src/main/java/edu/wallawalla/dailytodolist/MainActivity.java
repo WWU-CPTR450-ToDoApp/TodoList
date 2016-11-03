@@ -10,9 +10,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Dictionary<Integer, String> d = new Hashtable<Integer, String>();
+        Dictionary<Integer, String> d = new Hashtable<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
     }
 }
