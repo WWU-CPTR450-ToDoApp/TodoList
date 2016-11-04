@@ -22,8 +22,9 @@ public class DBHelper extends SQLiteOpenHelper {
         CREATE TABLE taskList (
             _id INTEGER PRIMARY KEY AUTOINCREMENT,
             taskName TEXT NOT NULL,
-            taskTime INTEGER
-            completed NOT NULL DEFAULT 0 (boolean default set to false)
+            taskTime INTEGER,
+            completed NOT NULL DEFAULT 0
+        );
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
