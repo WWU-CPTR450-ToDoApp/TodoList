@@ -1,4 +1,4 @@
-package edu.wallawalla.dailytodolist;
+package edu.wallawalla.dailytodolist.db;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
