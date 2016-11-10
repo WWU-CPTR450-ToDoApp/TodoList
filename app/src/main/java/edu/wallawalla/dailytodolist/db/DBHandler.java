@@ -5,49 +5,48 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "todotaskDB.db";
-    private static final String TABLE_TASKS = "tasks";
-
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_TASKNAME = "taskname";
-    public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+    public DBHandler(Context context) {
+        super(context, TaskContract.DATABASE_NAME, null, TaskContract.DATABASE_VERSION);
+        Log.d("DB", "super");
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TASKS_TABLE = "CREATE TABLE " + TABLE_TASKS + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + COLUMN_TASKNAME + " TEXT" + ")";
+        Log.d("DB", "CREATE");
+        String CREATE_TASKS_TABLE = "CREATE TABLE " + TaskContract.TaskEntry.TABLE + "("
+                + TaskContract.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TaskContract.TaskEntry.COLUMN_NAME_COL1 + " TEXT NOT NULL" + ");";
         db.execSQL(CREATE_TASKS_TABLE);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
+        Log.d("DB", "OVER");
+        db.execSQL("DROP TABLE IF EXISTS " + TaskContract.TaskEntry.TABLE);
         onCreate(db);
     }
 
     public void addTask(ToDoTask task) {
+        Log.d("DB", "ADD");
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TASKNAME, task.getTaskName());
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_COL1, task.getCol1Data());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.insert(TABLE_TASKS, null, values);
+        db.insertWithOnConflict(TaskContract.TaskEntry.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
     }
 
-    public ToDoTask findTask(String taskname) {
-        String query = "Select * FROM " + TABLE_TASKS + " WHERE " + COLUMN_TASKNAME + " = \"" + taskname + "\"";
+    public ToDoTask findTask(String s) {
+        String query = "Select * FROM " + TaskContract.TaskEntry.TABLE + " WHERE " + TaskContract.TaskEntry.COLUMN_NAME_COL1 + " = \"" + s + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         ToDoTask task = new ToDoTask();
         if(cursor.moveToFirst()) {
             cursor.moveToFirst();
             task.setID(Integer.parseInt(cursor.getString(0)));
-            task.setTaskName(cursor.getString(1));
+            task.setCol1Data(cursor.getString(1));
             cursor.close();
         } else {
             task = null;
@@ -58,6 +57,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean deleteTask(String taskname) {
         boolean result = false;
+        /*
         String query = "Select * FROM " + TABLE_TASKS + " WHERE " + COLUMN_TASKNAME + " = \"" + taskname + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -70,6 +70,7 @@ public class DBHandler extends SQLiteOpenHelper {
             result = true;
         }
         db.close();
+        */
         return result;
     }
 }
