@@ -10,8 +10,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.wallawalla.dailytodolist.MainActivity">
 
-    <TextView
+    <ListView
+        android:id="@+id/todo_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
