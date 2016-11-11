@@ -55,22 +55,20 @@ public class DBHandler extends SQLiteOpenHelper {
         return task;
     }
 
-    public boolean deleteTask(String taskname) {
+    public boolean deleteTask(String s) {
         boolean result = false;
-        /*
-        String query = "Select * FROM " + TABLE_TASKS + " WHERE " + COLUMN_TASKNAME + " = \"" + taskname + "\"";
+        String query = "Select * FROM " + TaskContract.TaskEntry.TABLE + " WHERE " + TaskContract.TaskEntry.COLUMN_NAME_COL1 + " = \"" + s + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         ToDoTask task = new ToDoTask();
         if(cursor.moveToFirst()) {
             task.setID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_TASKS, COLUMN_ID + " = ?",
+            db.delete(TaskContract.TaskEntry.TABLE, TaskContract.COLUMN_ID + " = ?",
                     new String[]{ String.valueOf(task.getID()) });
             cursor.close();
             result = true;
         }
         db.close();
-        */
         return result;
     }
 }
