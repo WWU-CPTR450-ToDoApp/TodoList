@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
+import android.view.View;
+
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
     public DBHandler(Context context) {
@@ -38,21 +41,33 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ToDoTask findTask(String s) {
-        String query = "Select * FROM " + TaskContract.TaskEntry.TABLE + " WHERE " + TaskContract.TaskEntry.COLUMN_NAME_COL1 + " = \"" + s + "\"";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        ToDoTask task = new ToDoTask();
-        if(cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            task.setID(Integer.parseInt(cursor.getString(0)));
-            task.setCol1Data(cursor.getString(1));
-            cursor.close();
-        } else {
-            task = null;
-        }
-        db.close();
-        return task;
+    public Cursor findTask(String s) {
+        // Define a projection that specifies which columns from the database
+        // we will actually use after this query
+        String[] projection = {
+                TaskContract.TaskEntry._ID,
+                TaskContract.TaskEntry.COLUMN_NAME_COL1
+        };
+
+        // Filter results WHERE "COLUMN_NAME_COL1" = s
+        String selection = TaskContract.TaskEntry.COLUMN_NAME_COL1 + " = ?";
+        String[] selectionArgs = {s};
+
+        // How we want the results sorted in the resulting Cursor
+        String sortOrder = null;
+        //        TaskContract.TaskEntry.COLUMN_NAME_COL2;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(
+                TaskContract.TaskEntry.TABLE,   // the table to query
+                projection,                     // the columns to return
+                selection,                      // the columns for the WHERE clause
+                selectionArgs,                  // the values for the WHERE clause
+                null,                           // don't group the rows
+                null,                           // don't filter by row groups
+                sortOrder                       // the sort order
+        );
+        return c;
     }
 
     public boolean deleteTask(String s) {
@@ -71,4 +86,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return result;
     }
+
+
+
 }

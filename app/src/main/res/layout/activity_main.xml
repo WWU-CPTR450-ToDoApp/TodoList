@@ -52,7 +52,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="86dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp">
 
@@ -76,5 +76,16 @@
             android:id="@+id/delete_string"
             android:text="Delete"
             android:onClick="removeTask" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_todo" />
     </LinearLayout>
 </LinearLayout>
