@@ -41,17 +41,16 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cursor findTask(String s) {
+    public Cursor findTask(String key, String col) {
         // Define a projection that specifies which columns from the database
         // we will actually use after this query
         String[] projection = {
-                TaskContract.TaskEntry._ID,
-                TaskContract.TaskEntry.COLUMN_NAME_COL1
+                TaskContract.TaskEntry._ID, col
         };
 
-        // Filter results WHERE "COLUMN_NAME_COL1" = s
-        String selection = TaskContract.TaskEntry.COLUMN_NAME_COL1 + " = ?";
-        String[] selectionArgs = {s};
+        // Filter results WHERE col = key
+        String selection = col + " = ?";
+        String[] selectionArgs = {key};
 
         // How we want the results sorted in the resulting Cursor
         String sortOrder = null;

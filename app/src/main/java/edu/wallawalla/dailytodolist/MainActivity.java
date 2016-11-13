@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
     public void lookupTask (View view) {
-        Cursor c = dbHandler.findTask(taskBox.getText().toString());
+        Cursor c = dbHandler.findTask(taskBox.getText().toString(), taskBox.getText().toString());
         if(c != null) {
             idView.setText("Found " + c.getCount() + " entries matching the query.");
         } else {
