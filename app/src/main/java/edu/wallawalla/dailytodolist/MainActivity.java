@@ -1,23 +1,29 @@
 package edu.wallawalla.dailytodolist;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import edu.wallawalla.dailytodolist.db.DBHandler;
 import edu.wallawalla.dailytodolist.db.TaskContract;
-import edu.wallawalla.dailytodolist.utility.AddTaskFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DBHandler dbHandler;
@@ -34,10 +40,16 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
 
+
+
     public void addTaskClicked(View view) {
 
+        DialogFragment addfrag = AddTaskFragment.newInstance();
+        addfrag.show(getSupportFragmentManager(), "addTask");
 
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
+
+
+        /*LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View addTaskView = layoutInflater.inflate(R.layout.add_task, null);
         // create a builder for a new alert dialog
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -51,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 AddTaskFragment dpa = new AddTaskFragment(date);
             }
         });
-        adb.show();
+        adb.show();*/
         //ToDoTask task = new ToDoTask(taskBox.getText().toString());
         //dbHandler.addTask(task);
         //taskBox.setText("");
@@ -140,5 +152,83 @@ public class MainActivity extends AppCompatActivity {
 
         c.close();
         db.close();
+    }
+
+
+
+
+    public static class AddTaskFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        EditText date;
+
+        public static AddTaskFragment newInstance() {
+            AddTaskFragment frag = new AddTaskFragment();
+            Bundle args = new Bundle();
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            final View view = inflater.inflate(R.layout.add_task, container, false);
+            final Activity activity = getActivity();
+            return view;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            final View addTaskView = inflater.inflate(R.layout.add_task, null, false);
+
+            date = (EditText) addTaskView.findViewById(R.id.date);
+            // Show a date-picker when the date field is clicked
+            date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Calendar c = Calendar.getInstance();
+                    DatePickerDialog dfrag;
+                    dfrag = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int day) {
+                            date.setText("HI");
+                        }
+                    }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE));
+                    dfrag.show();
+                }
+            });
+
+            // Create a new instance of DatePickerDialog and return it
+            return new AlertDialog.Builder(getActivity())
+                    .setTitle("New Task")
+                    .setMessage("Add a new task")
+                    .setView(addTaskView)
+                    .create();
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+        }
+
+        public static class DatePickerFragment extends DialogFragment
+                implements DatePickerDialog.OnDateSetListener {
+
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                // Use the current date as the default date in the picker
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // Create a new instance of DatePickerDialog and return it
+                return new DatePickerDialog(getActivity(), this, year, month, day);
+            }
+
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                // Do something with the date chosen by the user
+            }
+        }
     }
 }
