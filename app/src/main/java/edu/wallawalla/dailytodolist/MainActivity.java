@@ -2,9 +2,11 @@ package edu.wallawalla.dailytodolist;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -15,12 +17,9 @@ import java.util.ArrayList;
 
 import edu.wallawalla.dailytodolist.db.DBHandler;
 import edu.wallawalla.dailytodolist.db.TaskContract;
-import edu.wallawalla.dailytodolist.db.ToDoTask;
+import edu.wallawalla.dailytodolist.utility.AddTaskFragment;
 
 public class MainActivity extends AppCompatActivity {
-    TextView idView;
-    EditText taskBox;
-
     private DBHandler dbHandler;
     private ListView mTaskListView;
     private ArrayAdapter<String> mAdapter;
@@ -30,39 +29,54 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        idView = (TextView) findViewById(R.id.taskID);
-        taskBox = (EditText) findViewById(R.id.taskName);
         dbHandler = new DBHandler(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
         updateUI();
     }
 
-    public void newTask (View view) {
-        ToDoTask task = new ToDoTask(taskBox.getText().toString());
-        dbHandler.addTask(task);
-        taskBox.setText("");
-        updateUI();
+    public void addTaskClicked(View view) {
+
+
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final View addTaskView = layoutInflater.inflate(R.layout.add_task, null);
+        // create a builder for a new alert dialog
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        // set add_task.xml to be layout file for the alertdialog builder
+        adb.setView(addTaskView);
+        final EditText date = (EditText) addTaskView.findViewById(R.id.date);
+        // Show a datepicker when the date field is clicked
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddTaskFragment dpa = new AddTaskFragment(date);
+            }
+        });
+        adb.show();
+        //ToDoTask task = new ToDoTask(taskBox.getText().toString());
+        //dbHandler.addTask(task);
+        //taskBox.setText("");
+        //updateUI();
     }
-    public void lookupTask (View view) {
-        Cursor c = dbHandler.findTask(taskBox.getText().toString(), taskBox.getText().toString());
+    public void findTaskClicked (View view) {
+        /*Cursor c = dbHandler.findTask(taskBox.getText().toString(), taskBox.getText().toString());
         if(c != null) {
             idView.setText("Found " + c.getCount() + " entries matching the query.");
         } else {
             idView.setText("No Match(es) Found");
         }
         // update the UI with the returned array
-        updateUI(c);
+        updateUI(c);*/
     }
 
-    public void removeTask (View view) {
-        boolean result = dbHandler.deleteTask(taskBox.getText().toString());
+    public void deleteTaskClicked (View view) {
+        /*boolean result = dbHandler.deleteTask(taskBox.getText().toString());
         if (result) {
             idView.setText("Record Deleted");
             taskBox.setText("");
         } else {
             idView.setText("No Match Found");
         }
-        updateUI();
+        updateUI();*/
     }
 
     public void deleteSingleTask(View view) {
