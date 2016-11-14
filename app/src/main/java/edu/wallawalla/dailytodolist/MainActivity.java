@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 };
                 selection = TaskContract.TaskEntry.COLUMN_NAME_COL1 + " LIKE '%'";
                 selectionArgs = new String[] {};
-                sortOrder = null;
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
                 c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
                 break;
             case "Today": // TODAY
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 cal = Calendar.getInstance();
                 cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)+1, 0, 0, 0);
                 selectionArgs = new String[] {String.valueOf(cal.getTimeInMillis())};
-                sortOrder = null;
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
                 c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
                 break;
             case "Tomorrow": // TOMORROW
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 calHi.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)+2, 0, 0, 0);                selectionArgs = new String[] {
                         String.valueOf(cal.getTimeInMillis()),
                         String.valueOf(calHi.getTimeInMillis())};
-                sortOrder = null;
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
                 c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
                 break;
             case "Completed": // COMPLETED
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 };
                 selection = TaskContract.TaskEntry.COLUMN_NAME_COL4 + " = ?";
                 selectionArgs = new String[] {"1"};
-                sortOrder = null;
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
                 c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
                 break;
             default:
