@@ -13,25 +13,27 @@ import java.util.ArrayList;
 public class DBHandler extends SQLiteOpenHelper {
     public DBHandler(Context context) {
         super(context, TaskContract.DATABASE_NAME, null, TaskContract.DATABASE_VERSION);
-        Log.d("DB", "super");
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("DB", "CREATE");
         String CREATE_TASKS_TABLE = "CREATE TABLE " + TaskContract.TaskEntry.TABLE + "("
                 + TaskContract.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + TaskContract.TaskEntry.COLUMN_NAME_COL1 + " TEXT NOT NULL" + ");";
+                + TaskContract.TaskEntry.COLUMN_NAME_COL1 + " TEXT NOT NULL, "
+                + TaskContract.TaskEntry.COLUMN_NAME_COL2 + " INTEGER NOT NULL, "
+                + TaskContract.TaskEntry.COLUMN_NAME_COL3 + " INTEGER NOT NULL, "
+                + TaskContract.TaskEntry.COLUMN_NAME_COL4 + " INTEGER NOT NULL, "
+                + TaskContract.TaskEntry.COLUMN_NAME_COL5 + " INTEGER NOT NULL, "
+                + TaskContract.TaskEntry.COLUMN_NAME_COL6 + " INTEGER"
+                + ");";
         db.execSQL(CREATE_TASKS_TABLE);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.d("DB", "OVER");
         db.execSQL("DROP TABLE IF EXISTS " + TaskContract.TaskEntry.TABLE);
         onCreate(db);
     }
 
     public void addTask(ToDoTask task) {
-        Log.d("DB", "ADD");
         ContentValues values = new ContentValues();
         values.put(TaskContract.TaskEntry.COLUMN_NAME_COL1, task.getCol1Data());
 

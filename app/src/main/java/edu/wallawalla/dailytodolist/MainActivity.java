@@ -24,6 +24,7 @@ import java.util.Calendar;
 
 import edu.wallawalla.dailytodolist.db.DBHandler;
 import edu.wallawalla.dailytodolist.db.TaskContract;
+import edu.wallawalla.dailytodolist.db.ToDoTask;
 import edu.wallawalla.dailytodolist.fragments.AddTaskFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,14 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void addTaskClicked(View view) {
-
         DialogFragment addfrag = new AddTaskFragment();
         addfrag.show(getSupportFragmentManager(), "addTask");
-
-        //ToDoTask task = new ToDoTask(taskBox.getText().toString());
-        //dbHandler.addTask(task);
-        //taskBox.setText("");
-        //updateUI();
+    }
+    public void addTaskMethod(String data_col1, long data_col2, long data_col3, int data_col4, int data_col5, String data_col6) {
+        ToDoTask task = new ToDoTask(data_col1, data_col2, data_col3, data_col4, data_col5, data_col6);
+        dbHandler.addTask(task);
+        updateUI();
     }
     public void findTaskClicked (View view) {
         /*Cursor c = dbHandler.findTask(taskBox.getText().toString(), taskBox.getText().toString());
