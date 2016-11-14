@@ -14,9 +14,9 @@ public class TimePickerFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default time in the picker
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR);
-        int min = c.get(Calendar.MINUTE);
+        final Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR);
+        int min = cal.get(Calendar.MINUTE);
 
         // Create a new instance of DatePickerDialog and return it
         return new TimePickerDialog(getActivity(), this, hour, min, true);

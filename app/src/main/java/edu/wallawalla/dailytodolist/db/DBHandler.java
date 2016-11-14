@@ -36,6 +36,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public void addTask(ToDoTask task) {
         ContentValues values = new ContentValues();
         values.put(TaskContract.TaskEntry.COLUMN_NAME_COL1, task.getCol1Data());
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_COL2, task.getCol2Data());
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_COL3, task.getCol3Data());
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_COL4, task.getCol4Data());
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_COL5, task.getCol5Data());
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_COL6, task.getCol6Data());
+
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -58,6 +64,20 @@ public class DBHandler extends SQLiteOpenHelper {
         String sortOrder = null;
         //        TaskContract.TaskEntry.COLUMN_NAME_COL2;
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(
+                TaskContract.TaskEntry.TABLE,   // the table to query
+                projection,                     // the columns to return
+                selection,                      // the columns for the WHERE clause
+                selectionArgs,                  // the values for the WHERE clause
+                null,                           // don't group the rows
+                null,                           // don't filter by row groups
+                sortOrder                       // the sort order
+        );
+        return c;
+    }
+
+    public Cursor findTask(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(
                 TaskContract.TaskEntry.TABLE,   // the table to query
