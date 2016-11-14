@@ -16,7 +16,7 @@ public final class TaskContract {
         public static final String COLUMN_NAME_COL1 = "title";
         public static final String COLUMN_NAME_COL2 = "date";
         public static final String COLUMN_NAME_COL3 = "time";
-        public static final String COLUMN_NAME_COL4 = "done";
+        public static final String COLUMN_NAME_COL4 = "complete";
         public static final String COLUMN_NAME_COL5 = "repeat";
         public static final String COLUMN_NAME_COL6 = "notes";
     }

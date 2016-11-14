@@ -26,5 +26,14 @@
             android:id="@+id/date"
             android:hint="MM/DD/YYYY" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:focusable="false"
+            android:id="@+id/time"
+            android:hint="HH:MM" />
+
     </LinearLayout>
 </LinearLayout>
