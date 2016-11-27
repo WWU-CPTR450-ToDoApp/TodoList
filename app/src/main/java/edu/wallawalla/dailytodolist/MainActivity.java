@@ -1,26 +1,34 @@
 package edu.wallawalla.dailytodolist;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import edu.wallawalla.dailytodolist.db.DBHandler;
 import edu.wallawalla.dailytodolist.db.TaskContract;
 import edu.wallawalla.dailytodolist.db.ToDoTask;
+import edu.wallawalla.dailytodolist.fragments.AddTaskFragment;
+import edu.wallawalla.dailytodolist.fragments.FindTaskFragment;
 
 public class MainActivity extends AppCompatActivity {
-    TextView idView;
-    EditText taskBox;
-
     private DBHandler dbHandler;
     private ListView mTaskListView;
     private ArrayAdapter<String> mAdapter;
@@ -30,39 +38,107 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        idView = (TextView) findViewById(R.id.taskID);
-        taskBox = (EditText) findViewById(R.id.taskName);
         dbHandler = new DBHandler(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
         updateUI();
     }
 
-    public void newTask (View view) {
-        ToDoTask task = new ToDoTask(taskBox.getText().toString());
+
+    // function that is called when the add button is clicked
+    public void addTaskClicked(View view) {
+        DialogFragment addfrag = new AddTaskFragment();
+        addfrag.show(getSupportFragmentManager(), "addTask");
+    }
+    // called when the user clicks the add button on the alert popup
+    public void addTaskMethod(String data_col1, long data_col2, long data_col3, int data_col4, int data_col5, String data_col6) {
+        ToDoTask task = new ToDoTask(data_col1, data_col2, data_col3, data_col4, data_col5, data_col6);
         dbHandler.addTask(task);
-        taskBox.setText("");
         updateUI();
     }
-    public void lookupTask (View view) {
-        Cursor c = dbHandler.findTask(taskBox.getText().toString(), taskBox.getText().toString());
+
+    // function that is called when the find button is clicked
+    public void findTaskClicked (View view) {
+        DialogFragment findfrag = new FindTaskFragment();
+        findfrag.show(getSupportFragmentManager(), "findTask");
+    }
+    // called when the user clicks the sort button on alert popup
+    public void findTaskMethod(String sortBy) {
+        String[] projection;      // the columns to return
+        String   selection;       // the columns for the WHERE clause
+        String[] selectionArgs;   // the values for the WHERE clause
+        String   sortOrder;       // the sort order
+        Cursor c = null;
+        Calendar cal, calHi;
+        switch(sortBy) {
+            case "All": // ALL
+                projection = new String[] {
+                        TaskContract.TaskEntry._ID,
+                        TaskContract.TaskEntry.COLUMN_NAME_COL1
+                };
+                selection = TaskContract.TaskEntry.COLUMN_NAME_COL1 + " LIKE '%'";
+                selectionArgs = new String[] {};
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
+                c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
+                break;
+            case "Today": // TODAY
+                projection = new String[] {
+                        TaskContract.TaskEntry._ID,
+                        TaskContract.TaskEntry.COLUMN_NAME_COL1
+                };
+                selection = TaskContract.TaskEntry.COLUMN_NAME_COL2 + " < ?";
+                cal = Calendar.getInstance();
+                cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)+1, 0, 0, 0);
+                selectionArgs = new String[] {String.valueOf(cal.getTimeInMillis())};
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
+                c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
+                break;
+            case "Tomorrow": // TOMORROW
+                projection = new String[] {
+                        TaskContract.TaskEntry._ID,
+                        TaskContract.TaskEntry.COLUMN_NAME_COL1
+                };
+                selection = TaskContract.TaskEntry.COLUMN_NAME_COL2 + " > ? "
+                            + "AND " + TaskContract.TaskEntry.COLUMN_NAME_COL2 + " < ?";
+                cal = Calendar.getInstance();
+                cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)+1, 0, 0, 0);
+                calHi = Calendar.getInstance();
+                calHi.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)+2, 0, 0, 0);                selectionArgs = new String[] {
+                        String.valueOf(cal.getTimeInMillis()),
+                        String.valueOf(calHi.getTimeInMillis())};
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
+                c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
+                break;
+            case "Completed": // COMPLETED
+                projection = new String[] {
+                        TaskContract.TaskEntry._ID,
+                        TaskContract.TaskEntry.COLUMN_NAME_COL1
+                };
+                selection = TaskContract.TaskEntry.COLUMN_NAME_COL4 + " = ?";
+                selectionArgs = new String[] {"1"};
+                sortOrder = TaskContract.TaskEntry.COLUMN_NAME_COL2 + "," + TaskContract.TaskEntry.COLUMN_NAME_COL3;
+                c = dbHandler.findTask(projection, selection, selectionArgs, sortOrder);
+                break;
+            default:
+        }
+        /*Cursor c = dbHandler.findTask(projection, );
         if(c != null) {
             idView.setText("Found " + c.getCount() + " entries matching the query.");
         } else {
             idView.setText("No Match(es) Found");
-        }
+        }*/
         // update the UI with the returned array
         updateUI(c);
     }
 
-    public void removeTask (View view) {
-        boolean result = dbHandler.deleteTask(taskBox.getText().toString());
+    public void deleteTaskClicked (View view) {
+        /*boolean result = dbHandler.deleteTask(taskBox.getText().toString());
         if (result) {
             idView.setText("Record Deleted");
             taskBox.setText("");
         } else {
             idView.setText("No Match Found");
         }
-        updateUI();
+        updateUI();*/
     }
 
     public void deleteSingleTask(View view) {
