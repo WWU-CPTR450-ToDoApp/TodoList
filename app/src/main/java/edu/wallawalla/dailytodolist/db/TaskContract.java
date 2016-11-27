@@ -13,7 +13,7 @@ public final class TaskContract {
 
     public static class TaskEntry implements BaseColumns {
         public static final String TABLE            = "taskTable";
-        public static final String COLUMN_NAME_COL1 = "title";
+        public static final String COL_TASK_TITLE = "title";
         public static final String COLUMN_NAME_COL2 = "date";
         public static final String COLUMN_NAME_COL3 = "time";
         public static final String COLUMN_NAME_COL4 = "complete";

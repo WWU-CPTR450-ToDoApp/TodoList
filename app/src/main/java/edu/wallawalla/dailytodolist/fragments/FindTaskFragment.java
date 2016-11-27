@@ -18,15 +18,15 @@ public class FindTaskFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // create a view based on add_task.xml
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        final View findTaskView = inflater.inflate(R.layout.find_task, null, false);
+        //final View findTaskView = inflater.inflate(R.layout.find_task, null, false);
 
         // Create a new instance of DatePickerDialog and return it
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Sort Tasks")
                 .setMessage("Select sort by:")
-                .setView(findTaskView)
+                //.setView(findTaskView)
                 // Create the Sort button to sort the tasks in the database
-                .setPositiveButton("Sort", new DialogInterface.OnClickListener() {
+                /*.setPositiveButton("Sort", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         RadioGroup rg = (RadioGroup) findTaskView.findViewById(R.id.rb_sortgroup);
@@ -35,7 +35,7 @@ public class FindTaskFragment extends DialogFragment {
                                 rb.getText().toString()
                         );
                     }
-                })
+                })*/
                 // Create a Cancel button to cancel creating a new task
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
