@@ -99,14 +99,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Bundle bundle = new Bundle();
+            BlankFragment blankFragment = new BlankFragment();
 
             switch (position) {
-                case 0:
-                    return new BlankFragment();
-                case 1:
-                    return new BlankFragment();
-                case 2:
-                    return new BlankFragment();
+                case 0: // DONE
+                case 1: // TODAY
+                case 2: // TOMORROW
+                    bundle.putInt("position", position);
+                    blankFragment.setArguments(bundle);
+                    return blankFragment;
             }
 
             return null;
@@ -125,5 +127,9 @@ public class MainActivity extends AppCompatActivity {
             return tab;
         }
 
+    }
+
+    public ViewPager getViewPager() {
+        return viewPager;
     }
 }

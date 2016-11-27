@@ -19,7 +19,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
                 + TaskContract.TaskEntry.COLUMN_NAME_COL3 + " INTEGER NOT NULL, "
                 + TaskContract.TaskEntry.COLUMN_NAME_COL4 + " INTEGER NOT NULL, "
                 + TaskContract.TaskEntry.COLUMN_NAME_COL5 + " INTEGER NOT NULL, "
-                + TaskContract.TaskEntry.COLUMN_NAME_COL6 + " INTEGER"
+                + TaskContract.TaskEntry.COL_TASK_DESC + " INTEGER"
                 + ");";
         db.execSQL(CREATE_TASKS_TABLE);
     }
@@ -36,7 +36,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         values.put(TaskContract.TaskEntry.COLUMN_NAME_COL3, task.getCol3Data());
         values.put(TaskContract.TaskEntry.COLUMN_NAME_COL4, task.getCol4Data());
         values.put(TaskContract.TaskEntry.COLUMN_NAME_COL5, task.getCol5Data());
-        values.put(TaskContract.TaskEntry.COLUMN_NAME_COL6, task.getCol6Data());
+        values.put(TaskContract.TaskEntry.COL_TASK_DESC, task.getCol6Data());
 
 
         SQLiteDatabase db = this.getWritableDatabase();
